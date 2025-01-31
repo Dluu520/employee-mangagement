@@ -11,8 +11,10 @@ interface Employee {
 }
 // This component manages employee data, with functions to add, delete, and update employees
 const MyEmployees = () => {
-  const myEmployee = "http://localhost:3000/api/users"; // Your MongoDB endpoint
-
+  // Development purpose API
+  // const myEmployee = "http://localhost:3000/api/users"; // Your MongoDB endpoint
+  const myEmployee =
+    "https://employees-restful-api-example.vercel.app/api/users";
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
