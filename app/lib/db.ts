@@ -1,31 +1,40 @@
-// First step in rest API after establishing api is working under /api/(auth)/users
-// we created a database under mongodb and set up .env file with URI
-import mongoose, { connection, connections } from "mongoose";
-//install mongoose package
-const URI = process.env.MONGO_URI;
-// grab the URI from .env that has the connection to our database
+import mongoose from "mongoose";
 
-// establish connection
-const connect = async () => {
-  const connectionState = mongoose.connection.readyState;
+// Define the type for the MongoDB URI
+const URI: string | undefined = process.env.MONGO_URI;
 
+// Function to establish a connection to the database
+const connect = async (): Promise<void> => {
+  // Get the current connection state
+  const connectionState: number = mongoose.connection.readyState;
+
+  // Check if already connected
   if (connectionState === 1) {
     console.log("Already connected to database");
     return;
   }
+
+  // Check if connecting
   if (connectionState === 2) {
     console.log("Connecting...");
     return;
   }
-  //  if all the fail connection checks has passed then try connecting
+
+  // If URI is not defined, throw an error
+  if (!URI) {
+    throw new Error("MONGO_URI is not defined in the environment variables.");
+  }
+
+  // Try connecting to the database
   try {
-    mongoose.connect(URI!, {
+    await mongoose.connect(URI, {
       dbName: "employee-management",
       bufferCommands: true,
     });
     console.log("Database connected.");
-  } catch (err: any) {
-    console.log("Error found: ", err);
+  } catch (err) {
+    console.error("Error found: ", err);
+    throw err; // Re-throw the error for further handling
   }
 };
 
