@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 interface Employee {
   _id: string;
@@ -50,7 +51,7 @@ const MyEmployees = () => {
   // Handle search/filter
   useEffect(() => {
     const filtered = employees.filter(
-      employee =>
+      (employee) =>
         employee?._id?.toString().includes(searchTerm) ||
         employee?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee?.username?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,8 +88,8 @@ const MyEmployees = () => {
       console.log("API Response after adding employee:", data);
 
       // Update state with the new employee
-      setEmployees(prevEmployees => [...prevEmployees, data]);
-      setFilteredEmployees(prevEmployees => [...prevEmployees, data]);
+      setEmployees((prevEmployees) => [...prevEmployees, data]);
+      setFilteredEmployees((prevEmployees) => [...prevEmployees, data]);
 
       // Close the modal and reset the form
       setIsModalOpen(false);
@@ -130,9 +131,9 @@ const MyEmployees = () => {
         throw new Error("Failed to delete employee");
       }
 
-      setEmployees(employees.filter(employee => employee._id !== id));
+      setEmployees(employees.filter((employee) => employee._id !== id));
       setFilteredEmployees(
-        filteredEmployees.filter(employee => employee._id !== id)
+        filteredEmployees.filter((employee) => employee._id !== id)
       );
     } catch (err) {
       setError("Failed to delete employee");
@@ -141,14 +142,21 @@ const MyEmployees = () => {
   };
 
   return (
-    <div className="flex flex-col p-4 bg-white rounded-lg shadow-lg w-[800px] h-[600px] shadow-black">
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      className="flex flex-col p-4 bg-white rounded-lg shadow-lg h-full shadow-black"
+    >
       {/* Search Bar */}
-      <h1>MongoDB API endpoint</h1>
+      <h1>
+        MongoDB Restful API - Create, Read, Update, Delete functionalities
+      </h1>
       <input
         type="text"
         placeholder="Search by ID, Email, or Username"
         value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className="p-2 mb-4 border border-gray-300 rounded-md"
       />
 
@@ -259,7 +267,7 @@ const MyEmployees = () => {
       {/* Loading and Error Messages */}
       {isLoading && <div className="mt-4 text-center">Loading...</div>}
       {error && <div className="mt-4 text-center text-red-500">{error}</div>}
-    </div>
+    </motion.div>
   );
 };
 

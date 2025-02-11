@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 // Define the Employee interface
 interface Employee {
@@ -55,7 +56,7 @@ const EmployeeList = ({ apiEndpoint }: EmployeeListProps) => {
   // Handle search/filter
   useEffect(() => {
     const filtered = employees.filter(
-      employee =>
+      (employee) =>
         employee.id.toString().includes(searchTerm) ||
         employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,14 +67,19 @@ const EmployeeList = ({ apiEndpoint }: EmployeeListProps) => {
   }, [searchTerm, employees]);
 
   return (
-    <div className="flex flex-col p-4 bg-white rounded-lg shadow-lg w-[800px] h-[600px] shadow-black">
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      className="flex flex-col p-4 bg-white rounded-lg shadow-lg h-2/3 shadow-black"
+    >
       {/* Search Bar */}
-      <h1>Dummyjson public API endpoint</h1>
+      <h1>Dummyjson public API endpoint - Filter simulation</h1>
       <input
         type="text"
-        placeholder="Search by ID, Name, Position, or Department"
+        placeholder="Search by ID, Name, Position, or Department. Example: Support"
         value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className="p-2 mb-4 border border-gray-300 rounded-md"
       />
 
@@ -90,7 +96,7 @@ const EmployeeList = ({ apiEndpoint }: EmployeeListProps) => {
             </tr>
           </thead>
           <tbody>
-            {filteredEmployees.map(employee => (
+            {filteredEmployees.map((employee) => (
               <tr key={employee.id} className="border-b">
                 <td className="p-2">{employee.id}</td>
                 <td className="p-2">{employee.firstName}</td>
@@ -102,7 +108,7 @@ const EmployeeList = ({ apiEndpoint }: EmployeeListProps) => {
           </tbody>
         </table>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
